@@ -69,7 +69,7 @@
 
 for ($i = 1; $i <= 10; $i++) {
     echo "<div class='horizontal-scroll__item'>";
-    echo "<img src='assets/img/articleimg.jpg'></img>";
+    echo "<img class='article_img' src='assets/img/articleimg.jpg'></img>";
     echo "<p class='p1'>Article ".$i."</p>";
     echo "<p class='p2'>"."48.00"."€</p>";
     echo "<a href='https://augustine-metro.fr/100-poncho-cape-adulte-violet.html' class='horizontal-scroll__itemonclick'>Voir l'article</a>";
@@ -94,8 +94,8 @@ for ($i = 1; $i <= 10; $i++) {
 				<?php
         
         for ($i = 1; $i <= 9; $i++) {
-          echo "<li class='horizontal-scroll__item'>";
-          echo "<img src='assets/img/articleimg.jpg'></img>";
+          echo "<li class='horizontal-scroll__item bonheur'>";
+          echo "<img class='article_img' src='assets/img/articleimg.jpg'></img>";
           echo "<p class='p1'>Article ".$i."</p>";
           echo "<p class='p2'>"."48.00"."€</p>";
           echo "<a href='https://augustine-metro.fr/100-poncho-cape-adulte-violet.html' class='horizontal-scroll__itemonclick'>Voir l'article</a>";
@@ -106,7 +106,7 @@ for ($i = 1; $i <= 10; $i++) {
 			</ul>
 
       <div class = "zone_news">
-  Dernier article (infos sur l'entreprise)
+  Dernières actualités
   </div>
       <div class="bonheur_categorie_title second">
         <img src = "assets/img/softshell.jpg">
@@ -117,7 +117,7 @@ for ($i = 1; $i <= 10; $i++) {
         
         for ($i = 1; $i <= 9; $i++) {
           echo "<li class='horizontal-scroll__item'>";
-          echo "<img src='assets/img/articleimg.jpg'></img>";
+          echo "<img class='article_img' src='assets/img/articleimg.jpg'></img>";
           echo "<p class='p1'>Article ".$i."</p>";
           echo "<p class='p2'>"."48.00"."€</p>";
           echo "<a href='https://augustine-metro.fr/100-poncho-cape-adulte-violet.html' class='horizontal-scroll__itemonclick'>Voir l'article</a>";

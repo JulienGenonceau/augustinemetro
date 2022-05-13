@@ -1,11 +1,11 @@
 #navbar{
-    position: fixed;
+    position: sticky;
     z-index: 999;
-    margin-top: -150px;
+    top:0;
 }
 
 #navbar_top{
-    height: 100px;
+    height: 8vh;
     background-color: rgb(77, 211, 166);
     display: flex;
     align-items: center;
@@ -15,7 +15,7 @@
     width: 100vw;
 }
 #navbar_bottom{
-    height: 70px;
+    height: 7vh;
     display: flex;
     background-color: white;
     align-items: center;
@@ -28,6 +28,7 @@
 #navbarimg{
     position: absolute;
     left: 10%;
+    height: 60%;
 }
 
 #logoconainters{
@@ -37,15 +38,16 @@
 }
 
 .navbarlogo{
-    height: 30px;
-    margin: 10px;
+    height: 4vh;
+    margin: 1vh;
+    margin-top:2vh;
     cursor: pointer;
 }
 .navbarlogo.search{
     position: absolute;
-    height: 20px;
+    height: 3vh;
     margin-right: 28%;
-    margin-top: 2px;
+    margin-top: 1vh;
     cursor: auto;
 }
 
@@ -54,7 +56,7 @@
     cursor: pointer;
     font-weight: bold;
     color: rgb(0, 0, 0);
-    font-size: 17px;
+    font-size: 2vh;
     text-align: center;
 }
 
@@ -84,7 +86,7 @@
     z-index: 100;
     width: 100%;
     position: fixed;
-    margin-top: 10px;
+    top:15vh;
 }
 
 #sous_categories{
@@ -113,7 +115,8 @@
 }
 
 .souscategorieLink{
-    margin-bottom: 8px;
+    margin-bottom: 1vh;
+    font-size: 1.8vh;
     text-decoration: none;
     color: gray;
     cursor: pointer;
@@ -124,13 +127,14 @@
 
 #navbar_searchinput{
     width: 30%;
-    height: 40px;
+    height: 5vh;
     text-align: center;
     background-color: whitesmoke;
     border-radius: 20px;
     transition: background-color 0.25s;
     font-family: 'Roboto', sans-serif;
-    font-size: 17px;
+    font-size: 2.2vh;
+    margin-top:1vh;
 }
 #navbar_searchinput:hover{
     background-color: rgb(233, 233, 233);

@@ -6,11 +6,11 @@ body{
 
 
 .slider{
-    margin-top: 3vh;
-    height: 48vh !important;
+    height: 450px !important;
+    margin-top: 2vh;
 }
 .slides{
-    height: 45vh !important;
+    height: 450px !important;
 }
 
 #bodycontainer{
@@ -20,12 +20,12 @@ body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 150px;
+    margin-top: 0px;
 }
 
 .indicators{
     position: absolute !important;
-    top: 86%;
+    top: 90%;
     z-index: 500;
 }
 
@@ -33,7 +33,6 @@ body{
     width: 70vw;
     display: flex;
     gap: 5px;
-    height: 320px;
     overflow-x: auto;
     -ms-scroll-snap-type: x mandatory;
         scroll-snap-type: x mandatory;
@@ -48,12 +47,14 @@ body{
     background-color: white;
     color: rgb(95, 95, 95);
     display: flex;
-    flex: 0 0 19.75%;
+    flex: 0 0 17.2vw;
     flex-direction: column;
     font-size: 40px;
     justify-content: center;
     scroll-snap-align: start;
     position: relative;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
   .horizontal-scroll__item .p1{
@@ -94,7 +95,7 @@ body{
 
   .decouvreznosderniersarticles{
       width: 100%;
-      margin-top: -15px;
+      margin-top: 2vh;
       margin-bottom: 25px;
       font-size: 24px;
       text-align: center;
@@ -106,7 +107,6 @@ body{
 
   .trouvezvotrebonheur{
     width: 100%;
-    margin-top: 80px;
     margin-bottom: 25px;
     text-align: center;
     font-size: 24px;
@@ -163,10 +163,10 @@ body{
 .zone_news{
     border: solid black 4px;
     text-align: center;
-    width: 80vw;
+    margin-top: 8vh;
+    width: 100%;
     height: 500px;
     line-height: 500px;
-    margin-left: 10vw;
 }
 
 .zone_bonheur{
@@ -190,10 +190,15 @@ body{
     color: white;
 }
 
+.article_img{
+    width: 70%;
+    object-fit: contain;
+}
+
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
 
 .zone_bonheur_wrapper{
-			--auto-grid-min-size: 500px;
+			--auto-grid-min-size: 400px;
 			display: grid;
 			grid-gap: 6px;
 			grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
@@ -250,4 +255,36 @@ position: relative;
 .bonheur_categorie_title.second p{
     margin-left: -5%;
     text-align: right;
+}
+
+@media (max-width: 1920px){
+    .zone_bonheur_wrapper{
+        --auto-grid-min-size: 300px;
+    }
+}
+@media (max-width: 900px){
+    .zone_bonheur_wrapper{
+        --auto-grid-min-size: 150px;
+    }
+    .zone_bonheur_container{
+        min-width: 100vw !important;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .zone_bonheur{
+        margin-left: 0vw;
+        text-align: center;
+        width: 100vw;
+        padding-bottom: 100px;
+    }
+    .bonheur_categorie_title{
+        margin-left: 0 !important;
+        min-width: 100vw !important;
+    }
+}
+
+@media (max-width: 1200px){
+    .slider{
+        display: none;
+    }
 }
