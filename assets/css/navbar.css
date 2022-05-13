@@ -6,6 +6,7 @@
 
 #navbar_top{
     height: 8vh;
+    max-height: 80px;
     background-color: rgb(77, 211, 166);
     display: flex;
     align-items: center;
@@ -16,6 +17,7 @@
 }
 #navbar_bottom{
     height: 7vh;
+    max-height: 70px;
     display: flex;
     background-color: white;
     align-items: center;
@@ -30,24 +32,39 @@
     left: 10%;
     height: 60%;
 }
+.burger{
+    display: none;
+    position: absolute;
+    right: 0%;
+    height: 50%;
+    width: 40%;
+    font-size: 8vh;
+    color: white;
+    background-image: url(../img/burgerpng.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
 
 #logoconainters{
     position: absolute;
     right: 10%;
     max-height: 100%;
+    display: flex;
+    flex-direction: row;
 }
 
 .navbarlogo{
     height: 4vh;
+    max-height: 30px;
     margin: 1vh;
-    margin-top:2vh;
     cursor: pointer;
 }
 .navbarlogo.search{
     position: absolute;
     height: 3vh;
+    max-height: 23px !important;
     margin-right: 28%;
-    margin-top: 1vh;
     cursor: auto;
 }
 
@@ -56,7 +73,7 @@
     cursor: pointer;
     font-weight: bold;
     color: rgb(0, 0, 0);
-    font-size: 2vh;
+    font-size: clamp(10px, 2vw, 18px);
     text-align: center;
 }
 
@@ -83,10 +100,9 @@
 #sous_categories_container{
     position: absolute;
     background-color: rgb(255, 255, 255);
-    z-index: 100;
+    z-index: 900;
     width: 100%;
     position: fixed;
-    top:15vh;
 }
 
 #sous_categories{
@@ -112,11 +128,12 @@
     margin-top: 15px;
     margin-bottom: 20px;
     cursor: pointer;
+    font-size: clamp(10px, 1.8vh, 17px);
 }
 
 .souscategorieLink{
     margin-bottom: 1vh;
-    font-size: 1.8vh;
+    font-size: clamp(10px, 1.8vh, 17px);
     text-decoration: none;
     color: gray;
     cursor: pointer;
@@ -128,14 +145,50 @@
 #navbar_searchinput{
     width: 30%;
     height: 5vh;
+    max-height: 35px;
     text-align: center;
     background-color: whitesmoke;
     border-radius: 20px;
     transition: background-color 0.25s;
     font-family: 'Roboto', sans-serif;
-    font-size: 2.2vh;
+    font-size: clamp(10px, 2.2vh, 17px);
     margin-top:1vh;
 }
 #navbar_searchinput:hover{
     background-color: rgb(233, 233, 233);
+}
+
+#logoconainters a{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center !important;
+    color: white;
+    font-size: clamp(5px, 1vh, 10px);
+}
+
+@media (max-width: 1200px){
+    #navbar_searchinput{
+    display: none;
+    }
+    .navbarlogo{
+    display: none;
+    }
+    #navbarimg{
+        position: absolute;
+        height: 80%;
+        left: 10%;
+        width: 50%;
+        object-fit: contain;
+    }
+    #navbar_bottom{
+        display: none;
+    }
+    #navbar_top{
+        height: 15vh;
+    }
+    .burger{
+        display: block;
+    }
 }

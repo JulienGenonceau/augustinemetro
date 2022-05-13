@@ -5,9 +5,12 @@
      <img class="navbarlogo search" src="assets/img/search.png"></img> </input>
   <img id="navbarimg" src="assets/img/logo.jpg"></img> 
    <div id="logoconainters">
-     <img class="navbarlogo" src="assets/img/panier.png"></img> 
-     <img class="navbarlogo" src="assets/img/profile.png"></img> 
+     <a href="https://augustine-metro.fr/panier"><img class="navbarlogo" src="assets/img/panier.png"></img><!--Panier--></a>
+     <a href="https://augustine-metro.fr/connexion"><img class="navbarlogo" src="assets/img/profile.png"></img><!--Profil--></a>
    </div>
+
+    <div class = "burger"></div> 
+
 </div>
 <div id="navbar_bottom">
 </div>

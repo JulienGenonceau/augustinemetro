@@ -16,6 +16,10 @@
 
   <div id = "bodycontainer">
 
+    <div class = "paralax">
+      AUGUSTINE MÉTRO
+    </div>
+
     <div class="slider">
     <ul class="slides">
       <li>
@@ -148,8 +152,10 @@ for ($i = 1; $i <= 10; $i++) {
   document.getElementById("derniers_articles_rightarrow").style.opacity = "1";
   });
   $( "#derniers_articles" ).mouseleave(function() {
+    if (window.innerWidth > 900){
   document.getElementById("derniers_articles_leftarrow").style.opacity = "0";
   document.getElementById("derniers_articles_rightarrow").style.opacity = "0";
+}
   });
 
   $('#derniers_articles_rightarrow').click(function(){
@@ -159,6 +165,15 @@ for ($i = 1; $i <= 10; $i++) {
     $( ".horizontal-scroll" ).scrollLeft( $( ".horizontal-scroll" ).scrollLeft() - $( ".horizontal-scroll" ).width() );
   });
 
+  window.onresize = function(){
+    if (window.innerWidth > 900){
+      document.getElementById("derniers_articles_leftarrow").style.opacity = "0";
+      document.getElementById("derniers_articles_rightarrow").style.opacity = "0";
+    }else{
+      document.getElementById("derniers_articles_leftarrow").style.opacity = "1";
+      document.getElementById("derniers_articles_rightarrow").style.opacity = "1";
+    }
+  }
   </script>
 
 </body>

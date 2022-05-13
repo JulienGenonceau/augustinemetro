@@ -4,6 +4,16 @@ body{
     overflow-x: hidden;
 }
 
+.paralax{
+
+    display: none;
+    width: 100vw;
+    height: 450px;
+    background-image: url(../img/slider2.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+
+}
 
 .slider{
     height: 450px !important;
@@ -281,10 +291,60 @@ position: relative;
         margin-left: 0 !important;
         min-width: 100vw !important;
     }
+    .horizontal-scroll__item {
+        flex: 0 0 35vw;
+      }
+
+      .bonheur_categorie_title p{
+    margin-left: 0;
+    text-align: center;
+    font-size: clamp(25px, 9vh, 50px);
+}
+
+.bonheur_categorie_title.second p{
+    margin-left: 0;
+    text-align: center;
+    font-size: clamp(25px, 9vh, 50px);
+}
+
+#derniers_articles_leftarrow{
+    opacity: 1;
+}
+
+#derniers_articles_rightarrow{
+    opacity: 1;
+}
+}
+
+@media (max-width: 600px){
+    .horizontal-scroll{
+        width: 100vw;
+        padding-left: 10vw;
+    }
+
+    .horizontal-scroll__item {
+        flex: 0 0 80%;
+      }
+      #derniers_articles_leftarrow{
+          display: none;
+    }
+  
+    #derniers_articles_rightarrow{
+        display: none;
+  }
 }
 
 @media (max-width: 1200px){
     .slider{
         display: none;
+    }
+    .paralax{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: 100%;
+        font-size: 7vh;
+        color: white;
+        text-align: center;
     }
 }
