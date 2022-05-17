@@ -3,6 +3,7 @@ footer{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    max-width: 100vw;
 }
 
 .nosreseaux{
@@ -30,6 +31,7 @@ footer{
 
 #linkscontainer{
     display: flex;
+    max-width: 80vw;
 }
 
 .linkscontainer p{
@@ -59,11 +61,13 @@ footer{
     margin-bottom: 25px;
 }
 
-.footer_items{
+#footer_items{
     display: flex;
     flex-direction: row;
+    margin-top: 25px;
     margin-bottom: 25px;
-    max-width: 1200px;
+    width: 100%;
+    max-width: 80vw;
 }
 
 .footer_item{
@@ -95,6 +99,10 @@ footer{
     text-align: center;
 }
 
+#footer_texts{
+max-width: 80vw;
+}
+
 #footer_texts h2{
     font-size: 12px;
 }
@@ -106,6 +114,7 @@ footer{
 }
 
 .footer_ecusson{
+    max-width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -123,11 +132,14 @@ footer{
        text-align: center;
        width: 80vw;
     }
-    .footer_items{
+    #footer_items{
         margin-top: 5vh;
         flex-direction: column;
         align-items: center;
         gap: 10vh;
+    }
+    .footer_item{
+        width: 80%;
     }
     .copyrights{
         width: 90%;

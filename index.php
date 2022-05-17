@@ -85,12 +85,10 @@ for ($i = 1; $i <= 10; $i++) {
     <div id="derniers_articles_rightarrow"></div>
   </section>
 
-  </div>
-
   <h3 class="trouvezvotrebonheur">Trouvez votre bonheur</h3>
   <div class = "zone_bonheur">
   <div class="zone_bonheur_container">
-        <div class="bonheur_categorie_title">
+        <div class="bonheur_categorie_title" id="ponchotitle">
         <img src = "assets/img/ponchos.jpg">
         <p>PONCHOS</p>
         </div>
@@ -138,6 +136,9 @@ for ($i = 1; $i <= 10; $i++) {
 
   
   <?php include 'assets/includes/footer.php';?>
+
+  
+  </div>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -165,7 +166,12 @@ for ($i = 1; $i <= 10; $i++) {
     $( ".horizontal-scroll" ).scrollLeft( $( ".horizontal-scroll" ).scrollLeft() - $( ".horizontal-scroll" ).width() );
   });
 
-  window.onresize = function(){
+  const collection = document.getElementsByClassName("zone_bonheur_wrapper");
+  for (let i = 0; i < collection.length; i++) {
+  collection[i].style.width = document.getElementById("ponchotitle").offsetWidth+"px";
+  }
+
+  window.addEventListener("resize", function(){
     if (window.innerWidth > 900){
       document.getElementById("derniers_articles_leftarrow").style.opacity = "0";
       document.getElementById("derniers_articles_rightarrow").style.opacity = "0";
@@ -173,7 +179,11 @@ for ($i = 1; $i <= 10; $i++) {
       document.getElementById("derniers_articles_leftarrow").style.opacity = "1";
       document.getElementById("derniers_articles_rightarrow").style.opacity = "1";
     }
+    const collection = document.getElementsByClassName("zone_bonheur_wrapper");
+  for (let i = 0; i < collection.length; i++) {
+  collection[i].style.width = document.getElementById("ponchotitle").offsetWidth+"px";
   }
+  });
   </script>
 
 </body>

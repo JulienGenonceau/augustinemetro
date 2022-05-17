@@ -9,11 +9,12 @@
      <a href="https://augustine-metro.fr/connexion"><img class="navbarlogo" src="assets/img/profile.png"></img><!--Profil--></a>
    </div>
 
-    <div class = "burger"></div> 
+    <div id = "burger"></div> 
 
 </div>
 <div id="navbar_bottom">
 </div>
+
 </div>
 
 <div id="sous_categories_container"><div id="sous_categories"></div></div>
@@ -23,9 +24,10 @@
 sous_categories_opened = false
 
 class Categorie {
-  constructor(name, souscategories) {
+  constructor(name, souscategories, link) {
     this.name = name
     this.souscategories = souscategories
+    this.link = link
   }
 }
 
@@ -55,7 +57,7 @@ new Categorie("Garçons", [
             [new CategorieLink("Vestes coupe droite", "https://augustine-metro.fr/4-vestes-coupe-droite"),
             new CategorieLink("Vestes coupe évasée", "https://augustine-metro.fr/4-vestes-coupe-droite"),
             new CategorieLink("Ponchos-capes", "https://augustine-metro.fr/4-vestes-coupe-droite")])
-]),
+], "https://augustine-metro.fr/17-pour-les-garcons"),
 
 new Categorie("Filles", [
     new SousCategorie("Vestes & ponchos",
@@ -67,18 +69,18 @@ new Categorie("Filles", [
             [new CategorieLink("Vestes coupe droite", "https://augustine-metro.fr/4-vestes-coupe-droite"),
             new CategorieLink("Vestes coupe évasée", "https://augustine-metro.fr/4-vestes-coupe-droite"),
             new CategorieLink("Ponchos-capes", "https://augustine-metro.fr/4-vestes-coupe-droite")])
-]),
+], "https://augustine-metro.fr/16-pour-les-filles"),
 
 new Categorie("Adultes", [
     new SousCategorie("Vestes & ponchos",
             [new CategorieLink("Hommes", "https://augustine-metro.fr/22-hommes"),
             new CategorieLink("Femmes", "https://augustine-metro.fr/21-femmes")])
-]),
+], "https://augustine-metro.fr/18-les-creations-pour-les-adultes"),
 
 new Categorie("Vide atelier", [
     new SousCategorie("Vide atelier",
             [new CategorieLink("Voir le vide atelier", "https://augustine-metro.fr/12-vide-atelier")])
-])
+], "https://augustine-metro.fr/12-vide-atelier")
 
 ]
 
@@ -107,6 +109,10 @@ navLinks.forEach(function(element, index){
      if (sous_categories_opened == false){animate_open_sous_categories()}
      sous_categories_opened = true
      liContainerList[index].lastElementChild.style.opacity = 1
+    });
+
+    liContainer.addEventListener('click', function(){
+    window.location.href = element.link
     });
 
 });
@@ -172,7 +178,36 @@ document.getElementById("sous_categories").addEventListener('mouseleave', functi
         liContainerList[index].lastElementChild.style.opacity = 0
       })
     }
+    
+    var buger_opened = false;
 
+    set_burger_state();
+
+    window.addEventListener('resize', function(){
+      set_burger_state();
+    })
+
+    document.getElementById("burger").onclick = function(){
+      buger_opened = !buger_opened;
+      set_burger_state();
+    }
+
+    function set_burger_state(){
+      if (window.innerWidth < 1200){
+        if (buger_opened){
+          document.getElementById("navbar_bottom").style.display = "flex"
+      }else{
+        close_burgermenu()
+      }
+      }else{
+          document.getElementById("navbar_bottom").style.display = "flex"
+      }
+
+    }
+
+    function close_burgermenu(){
+          document.getElementById("navbar_bottom").style.display = "none"
+    }
 
 
 </script>

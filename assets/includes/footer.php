@@ -56,7 +56,7 @@
         </div>
     </div>
 
-    <div class="footer_items">
+    <div id="footer_items">
 
          <a class="footer_item" href="https://augustine-metro.fr/page/5-paiement-securise">
              <img src="assets/img/smartphone.png" class="footer_item_img">
@@ -112,9 +112,11 @@
 <script>
 
 document.getElementById("footer_texts").style.width = document.getElementById("linkscontainer").offsetWidth+"px";
+document.getElementById("footer_items").style.width = document.getElementById("linkscontainer").offsetWidth+"px";
 
-window.onresize = function(){
+window.addEventListener('resize', function(){
 document.getElementById("footer_texts").style.width = document.getElementById("linkscontainer").offsetWidth+"px";
-}
+document.getElementById("footer_items").style.width = document.getElementById("linkscontainer").offsetWidth+"px";
+})
 
 </script>

@@ -32,7 +32,7 @@
     left: 10%;
     height: 60%;
 }
-.burger{
+#burger{
     display: none;
     position: absolute;
     right: 0%;
@@ -73,7 +73,7 @@
     cursor: pointer;
     font-weight: bold;
     color: rgb(0, 0, 0);
-    font-size: clamp(10px, 2vw, 18px);
+    font-size: clamp(10px, 2vh, 18px);
     text-align: center;
 }
 
@@ -183,12 +183,18 @@
         object-fit: contain;
     }
     #navbar_bottom{
-        display: none;
+        flex-direction: column;
+        height: 90vh;
+        max-height: 90vh;
+    }
+    .linavbar{
+        font-size: clamp(10px, 3.5vh, 50px);
+        margin: 2vh;
     }
     #navbar_top{
         height: 15vh;
     }
-    .burger{
+    #burger{
         display: block;
     }
 }
