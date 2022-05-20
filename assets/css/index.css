@@ -68,7 +68,9 @@ body{
   }
 
   .horizontal-scroll__item .p1{
-    font-size: 20px;
+    font-size: 17px;
+    width: 80%;
+    text-align: center;
   }
   .horizontal-scroll__item .p2{
     font-size: 18px;

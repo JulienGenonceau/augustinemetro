@@ -197,4 +197,7 @@
     #burger{
         display: block;
     }
+    #sous_categories_container{
+        display: none;
+    }
 }

@@ -50,7 +50,7 @@ navLinks = [
 new Categorie("Garçons", [
     new SousCategorie("Vestes & ponchos",
             [new CategorieLink("Vestes", "https://augustine-metro.fr/17-pour-les-garcons"),
-            new CategorieLink("Ponchos", "https://augustine-metro.fr/17-pour-les-garcons"),
+            new CategorieLink("Ponchos", "https://augustine-metro.fr/26-les-ponchos-pour-les-enfants"),
             new CategorieLink("Les charkaps", "https://augustine-metro.fr/13-les-charkaps")]),
 
     new SousCategorie("Softshells",
@@ -62,7 +62,7 @@ new Categorie("Garçons", [
 new Categorie("Filles", [
     new SousCategorie("Vestes & ponchos",
             [new CategorieLink("Vestes", "https://augustine-metro.fr/16-pour-les-filles"),
-            new CategorieLink("Ponchos", "https://augustine-metro.fr/16-pour-les-filles"),
+            new CategorieLink("Ponchos", "https://augustine-metro.fr/26-les-ponchos-pour-les-enfants"),
             new CategorieLink("Les charkaps", "https://augustine-metro.fr/13-les-charkaps")]),
 
     new SousCategorie("Softshells",
