@@ -1,16 +1,14 @@
 <?php
 
-$host = "109.234.162.106";
-$dbname = "naal3419_pres487";
-$user = "naal3419_pres487";
-$pass = "7[I)78npS1";
-$port = "";
+ $dbhost = "localhost";
+ $dbuser = "naal3419_pres487";
+ $dbpass = "7[I)78npS1";
+ $dbname = "naal3419_pres487";
 
-$mysqli= mysqli_connect ("localhost", "naal3419_pres487", "7[I)78npS1", "naal3419_pres487");
-
-// Check connection
-if ($mysqli -> connect_errno) {
-  echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
-  exit();
+ try {
+  $db = new PDO('mysql:host='.$dbhost.';dbname='.$dbname, $dbuser, $dbpass);
+} catch (PDOException $e) {
+  print "Erreur !: " . $e->getMessage() . "<br/>";
+  die();
 }
 ?>
