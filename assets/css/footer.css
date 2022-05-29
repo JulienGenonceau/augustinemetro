@@ -101,6 +101,8 @@ footer{
 
 #footer_texts{
 max-width: 80vw;
+height: 2px;
+overflow: hidden;
 }
 
 #footer_texts h2{

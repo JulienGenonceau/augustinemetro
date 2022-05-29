@@ -12,6 +12,8 @@
     <div id = "burger"></div> 
 
 </div>
+
+<div id = "search_result"></div>
 <div id="navbar_bottom">
 </div>
 
@@ -19,7 +21,10 @@
 
 <div id="sous_categories_container"><div id="sous_categories"></div></div>
 
+
 <script>
+  
+const navbar_searchinput = document.getElementById("navbar_searchinput")
 
 sous_categories_opened = false
 
@@ -104,12 +109,14 @@ navLinks.forEach(function(element, index){
     liContainerList.push(liContainer)
 
     liContainer.addEventListener('mouseenter', function(){
+      if (navbar_searchinput.value.length == 0){
     clear_selected_bar()
      show_navList(index)
      if (sous_categories_opened == false){animate_open_sous_categories()}
      sous_categories_opened = true
      liContainerList[index].lastElementChild.style.opacity = 1
-    });
+    }
+  });
 
     liContainer.addEventListener('click', function(){
     window.location.href = element.link
@@ -196,11 +203,14 @@ document.getElementById("sous_categories").addEventListener('mouseleave', functi
       if (window.innerWidth < 1200){
         if (buger_opened){
           document.getElementById("navbar_bottom").style.display = "flex"
+          document.getElementById("navbar_searchinput").style.display = "flex"
       }else{
         close_burgermenu()
+          document.getElementById("navbar_searchinput").style.display = "none"
       }
       }else{
           document.getElementById("navbar_bottom").style.display = "flex"
+          document.getElementById("navbar_searchinput").style.display = "flex"
       }
 
     }
@@ -208,6 +218,23 @@ document.getElementById("sous_categories").addEventListener('mouseleave', functi
     function close_burgermenu(){
           document.getElementById("navbar_bottom").style.display = "none"
     }
+    
+   navbar_searchinput.addEventListener("keyup", function(){
+    
+    if (navbar_searchinput.value.length > 0){
+      document.getElementById("search_result").style.display = "block";
+    }else{
+      document.getElementById("search_result").style.display = "none";
+    }
 
+    $.post('assets/php/navbar_search.php', {inputvalue:navbar_searchinput.value}, function(response){ 
+      $('#search_result').html(response)
+    });
+
+    })
+
+    document.getElementById("navbarimg").onclick = function(){
+      location.href = "./";
+    }
 
 </script>

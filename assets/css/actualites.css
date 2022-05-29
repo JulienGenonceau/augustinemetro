@@ -1,0 +1,90 @@
+body{
+    background-color: whitesmoke;
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
+
+
+.firsttitle{
+    width: 100%;
+    text-align: center;
+    background-color:white;
+    padding: 20px;
+    margin: 8px;
+    font-weight: bolder;
+}
+
+.bodycontainer{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+}
+
+.box{
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content:center;
+    min-height: 60vh;
+    margin: 5vh;
+    padding: 25px;
+    border-radius:20px;
+}
+
+.actu_section_container{
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    margin: 50px;
+}
+
+.actu_section_item{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.actu_img{
+    width: 100%;
+    border-radius: 15px;
+}
+
+.actu_section_title{
+    font-weight: bolder;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+.actu_section_text{
+    width: 85%;
+}
+
+.actu_title{
+    width: 70%;
+    text-align: center;
+    font-size: 40px;
+    font-weight: 100;
+    text-transform: uppercase;
+}
+.imgsmaller{
+    width: 75%;
+}
+
+.actu_date{
+    font-weight: bolder;
+}
+
+
+.newsection_contenu{
+    display: none;
+    color: gray;
+}

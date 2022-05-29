@@ -1,0 +1,10 @@
+<?php
+var_dump($_POST['name']);
+var_dump($_POST['date_de_sortie']);
+var_dump($_POST['show_date']);
+var_dump($_POST['list_is_video']);
+var_dump($_POST['list_is_image']);
+var_dump($_POST['list_filepath']);
+var_dump($_POST['list_title']);
+var_dump($_POST['list_text']);
+?>

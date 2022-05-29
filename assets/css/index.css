@@ -4,6 +4,8 @@ body{
     overflow-x: hidden;
 }
 
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
+
 .paralax{
 
     display: none;
@@ -65,6 +67,7 @@ body{
     position: relative;
     padding-top: 10px;
     padding-bottom: 10px;
+    height: 100%;
   }
 
   .horizontal-scroll__item .p1{
@@ -205,8 +208,6 @@ body{
     width: 70%;
     object-fit: contain;
 }
-
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
 
 .zone_bonheur_wrapper{
             max-width: 95vw;

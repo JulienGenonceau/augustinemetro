@@ -12,8 +12,11 @@
 </head>
 <body>
 
-    <?php include 'assets/includes/navbar.php';?>
-    <?php include 'configuration_page_accueil.php';?>
+    <?php
+    include 'configuration_page_accueil.php';
+    include 'assets/php/connecttodb.php';
+    include 'assets/includes/navbar.php';
+    ?>
 
   <div id = "bodycontainer">
 
@@ -71,8 +74,6 @@
   <div class="horizontal-scroll">
 
   <?php
-
-include 'assets/php/connecttodb.php';
 
 $sql = 'SELECT SQL_CALC_FOUND_ROWS p.`id_product` AS `id_product`,
  p.`reference`  AS `reference`,
@@ -194,7 +195,7 @@ $products = $stmt->fetchAll();
 			</ul>
 
       <div class = "zone_news">
-  Dernières actualités
+  <a href="actualites.php">Dernières actualités</a>
   </div>
       <div class="bonheur_categorie_title second">
         <img src = "assets/img/softshell.jpg">
@@ -234,7 +235,7 @@ WHERE (1 AND state = 1) AND (p.`reference` LIKE "%SOFTSHELL%")
 
 ORDER BY  `position` asc,  `id_product` asc
 
-LIMIT 0, '.$nombre_de_derniers_articles_a_afficher_categorie;;
+LIMIT 0, '.$nombre_de_derniers_articles_a_afficher_categorie;
 
 $stmt = $db->query($sql);
 $products = $stmt->fetchAll();
