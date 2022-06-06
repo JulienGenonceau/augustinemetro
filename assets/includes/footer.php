@@ -105,7 +105,7 @@
 		
     </div>
 
-    <p class="copyrights">© 2022 - La mode pour les enfants fabriqués dans les Ardennes depuis 1988 Augustine-Métro</p> 
+    <p class="copyrights">© 2022 - La mode pour les enfants fabriqués dans les Ardennes depuis 1988 Augustine-Métro - Site édité par Julien Genonceau</p> 
 
 </footer>
 

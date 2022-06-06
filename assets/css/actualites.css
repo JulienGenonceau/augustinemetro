@@ -44,6 +44,43 @@ body{
     margin: 50px;
 }
 
+
+.a_actulist{
+    display: flex;
+    flex-direction: row;
+    width: 95%;
+    max-width: 1000px;
+    background-color:white;
+    margin-bottom: 10px;
+    height: 200px;
+}
+
+h4{
+    max-width: 95%;
+    text-align: center;
+}
+
+.a_actulist:hover{
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.281);
+    transition: transform 0.2s, box-shadow 0.2s;
+    transform: scale(1.015);
+}
+
+.actu_miniature{
+    width: 50%;
+    object-fit: cover;
+}
+.actu_nomlist{
+    width: 40%;
+    margin-left: 5%;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    color: black;
+    font-size: 25px;
+    text-align: center;
+}
+
 .actu_section_item{
     width: 100%;
     padding: 10px;
@@ -88,4 +125,28 @@ body{
 .newsection_contenu{
     display: none;
     color: gray;
+}
+
+@media (max-width: 800px){
+
+
+    .a_actulist{
+        width: 100vw;
+        flex-direction: column-reverse;
+        height: auto;
+        margin-bottom: 20px;
+    }
+    .actu_miniature{
+        width: 100%;
+        object-fit: cover;
+    }
+    .actu_nomlist{
+        margin-left: 0%;
+        width: 100%;
+        padding: 50px;
+    }
+
+    .actu_section_container{
+        flex-direction: column;
+    }
 }

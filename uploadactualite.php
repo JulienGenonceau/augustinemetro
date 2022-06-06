@@ -13,6 +13,31 @@
 <body>
 
 <?php
+
+    if (!isset($_POST['uname'])){
+      $getttt = "";
+      if (isset($_GET['actumodif'])){
+        $getttt = "?actumodif=".$_GET['actumodif'];
+      };
+      echo('<form action="uploadactualite'.$getttt.'" method="post">');
+      ?>
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+
+    <button type="submit">Login</button>
+    </form>
+      <?php
+      
+    die();
+    }else{
+      if ($_POST['uname']!="augustinemetro@orange.fr" || $_POST['psw']!="SAuyP6MnIe5t"){
+        die();
+      }
+    }
+
     include 'configuration_page_accueil.php';
     include 'assets/php/connecttodb.php';
     //include 'assets/includes/navbar.php';
@@ -31,6 +56,39 @@
         $show_date = true;
         $actualite = new actu($name, $liste_de_sections, $date_de_sortie, $show_date);
 
+        if (isset($_GET['actumodif'])){
+
+        $stmt = $db->query("SELECT * FROM actu WHERE actu_id =".$_GET['actumodif']);
+        $lastactu = $stmt->fetch();
+            
+        $name = $lastactu['actu_nom'];
+        $date_de_sortie = $lastactu['actu_date'];
+        $show_date = true;
+        if($lastactu['actu_showdate']==0){$show_date = false;}
+        $lastactu_ID = $lastactu['actu_id'];
+        
+        $stmt = $db->query("SELECT * FROM actusection WHERE actusection_actuid =".$_GET['actumodif']);
+        
+        $liste_de_sections = [];
+          while ($row = $stmt->fetch()) {
+            $row_isvideo = false;
+            $row_isimage = false;
+            if ($row['actusection_is_video']=='1'){$row_isvideo = true;}
+            if ($row['actusection_is_image']=='1'){$row_isimage = true;}
+        
+            $row_filepath = $row['actusection_filepath'];
+            $row_title = $row['actusection_title'];
+            $row_desc = $row['actusection_desc'];
+            
+            $liste_de_sections[] = new actu_section($row_isvideo, $row_isimage, $row_filepath,  $row_title, $row_desc);
+        }
+        
+      //  $section = new actu_section(false, false, "",  "Titre exemple", "Description exemple"); // a suppr
+      //  $liste_de_sections[] = $section; // a suppr
+
+        $actualite = new actu($name, $liste_de_sections, $date_de_sortie, $show_date);
+        }
+
         echo "<p>Nom de l'article</p>";
         echo '<input id="actu_name_input" type="text" value="'.$name.'" maxlength="50"></input>'
     ?>
@@ -44,46 +102,49 @@
 
     <?php
 
-    for ($i = 0; $i < count($actualite->get_sections()); $i++){
+    //for ($i = 0; $i < count($actualite->get_sections()); $i++){
+      for ($i = 0; $i < 1; $i++){
         $title = $actualite->get_sections()[$i]->get_title();
         $desc =  $actualite->get_sections()[$i]->get_text();
-        echo '
-        <div class="section_actu">
-        <p class="sectionleftpartitle">Section 1</p>
-        <p>Image OU Vidéo</p>
-        <input type="file" name=""></input>
-        <p>Titre</p>
-        <input type="text" name="" value="'.$title.'" maxlength="100"></input>
-        <p>Texte</p>
-        <div class="cont">
-        <div id="editor" contenteditable="false">
-            <section id="toolbar">
-                <div id="bold" class="icon fa fa-bold">B</div>
-                <div id="italic" class="icon fa fa-italic">I</div>
-                <div id="createLink" class="icon fa fa-link">lien</div>
-                <div id="insertUnorderedList" class="icon fa fa-list">liste1</div>
-                <div id="insertOrderedList" class="icon fa fa-list-ol">liste2</div>
-                <div id="justifyLeft" class="icon fa fa-align-left">left</div>
-                <div id="justifyRight" class="icon fa fa-align-right">right</div>
-                <div id="justifyCenter" class="icon fa fa-align-center">center</div>
-                <div id="justifyFull" class="icon fa fa-align-justify">full</div>
-            </section>
-    
-            <div id="page" contenteditable="true">'.$desc.'</div>
-        </div>
-        </div>
-        
-        <p class="btnn" onclick="DeleteSection('.$i.')">Supprimer la section</p>
-    </div>
-    
-    </div>
-    
-        ';
+          echo '
+          <div class="section_actu">
+          <p class="sectionleftpartitle">Section '.($i+1).'</p>
+          <p>Image OU Vidéo</p>
+          <input type="file" name=""></input>
+          <p>Titre</p>
+          <input type="text" name="" value="'.$title.'" maxlength="100"></input>
+          <p>Texte</p>
+          <div class="cont">
+          <div id="editor" contenteditable="false">
+              <section id="toolbar">
+                  <div id="bold" class="icon fa fa-bold">B</div>
+                  <div id="italic" class="icon fa fa-italic">I</div>
+                  <div id="createLink" class="icon fa fa-link">lien</div>
+                  <div id="insertUnorderedList" class="icon fa fa-list">liste1</div>
+                  <div id="insertOrderedList" class="icon fa fa-list-ol">liste2</div>
+                  <div id="justifyLeft" class="icon fa fa-align-left">left</div>
+                  <div id="justifyRight" class="icon fa fa-align-right">right</div>
+                  <div id="justifyCenter" class="icon fa fa-align-center">center</div>
+                  <div id="justifyFull" class="icon fa fa-align-justify">full</div>
+              </section>
+      
+              <div id="page" contenteditable="true">'.$desc.'</div>
+          </div>
+          </div>
+          
+          <p class="btnn" onclick="DeleteSection('.$i.')">Supprimer la section</p>
+      </div>
+      
+      </div>
+      
+          ';
     }
 
     ?>
     
     <p class="btnn" onclick="AddNewSection();">Ajouter une section +</p>
+
+    <p class="btnn" onclick="ShowCRUD();">Modifier / Supprimer des articles</p>
 
     <p class="btnn" onclick="valider_et_publier();">Publier l'article ✔️</p>
 
@@ -494,6 +555,71 @@ function readURL(input, i) {
             }
         }
 
+        
+  function ShowCRUD(){
+    const div_crud = document.createElement("div");
+    div_crud.className = "divcrud";
+    document.body.appendChild(div_crud);
+
+    const div_croix  = document.createElement("div");
+    div_croix.className = "close";
+    div_crud.appendChild(div_croix);
+
+    div_croix.onclick = function(){
+      $('.divcrud').remove();
+    }
+
+    const actus_container = document.createElement("div");
+    actus_container.className = "crud_actus_container"
+    div_crud.appendChild(actus_container);
+
+    $.post("assets/php/get_actu_crud.php",
+    {
+      data1: ""
+    },
+    function(data){
+      actus_container.innerHTML = data;
+
+    $('.actu_crudlist').each(function(i, obj){
+      const div_actu = document.createElement("div");
+      div_actu.className = "actu_cruditem";
+      actus_container.appendChild(div_actu);
+
+      const div_name = document.createElement("p");
+      div_name.innerText = obj.innerText;
+      div_actu.appendChild(div_name);
+
+      const div_modifier = document.createElement("div");
+      div_modifier.className = "div_modifier"
+      div_actu.appendChild(div_modifier);
+
+      const div_supprimer = document.createElement("div");
+      div_supprimer.className = "div_supprimer"
+      div_actu.appendChild(div_supprimer);
+
+      div_modifier.onclick = function() {
+        window.location.replace("uploadactualite?actumodif="+obj.id);
+      }
+
+      div_supprimer.onclick = function() {
+        $.post("assets/php/delete_actupreview.php",
+        {
+          id_to_delete: obj.id
+        },
+        function(){
+        window.location.replace("uploadactualite");
+        });
+      }
+
+
+    });
+
+    });
+  }
+
+  AddNewSection();
+
   </script>
+
 </body>
 </html>

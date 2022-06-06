@@ -127,12 +127,26 @@ $actualite = new actu($name, $liste_de_sections, $date_de_sortie, $show_date);
         ?>
     </div>
 
+    <h4>RETROUVEZ TOUTES LES ACTUALITÉS</h4>
+
     <div class = "box" id="touteslesactualites">
         <?php
 
         $stmt = $db->query("SELECT * FROM actu ORDER BY actu_id DESC LIMIT 100");
+        $found_image = false;
         while ($row = $stmt->fetch()) {
-            echo "<a href='actualites?actuid=".$row['actu_id']."'>".$row['actu_nom']."<br>";
+            echo "<a class='a_actulist' href='actualites?actuid=".$row['actu_id']."'>";
+            
+        $stmt1 = $db->query("SELECT * FROM actusection WHERE actusection_actuid =".$row['actu_id']);
+            while ($row1 = $stmt1->fetch()) {
+                if ($row1['actusection_is_image']==1){
+                  $found_image = true;
+                  echo "<img class='actu_miniature' src='assets/php/actualites_files/".$row1['actusection_filepath']."'>";
+                  break;
+                }
+              }
+            echo ("<p class='actu_nomlist'>".$row['actu_nom']."</p>");
+            echo "</a>";
         }
 
         ?>
