@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="assets/css/footer.css">
 </head>
 <body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
     <?php
     include 'configuration_page_accueil.php';
@@ -194,9 +196,58 @@ $products = $stmt->fetchAll();
         ?>
 			</ul>
 
+      <div id="zone_newscontainer">
+         <div id="actus_leftarrow"></div>
       <div class = "zone_news">
-  <a href="actualites.php">Dernières actualités</a>
+        <?php
+
+        $stmt = $db->query("SELECT * FROM actu ORDER BY actu_id DESC LIMIT 1");
+        while ($row = $stmt->fetch()) {
+            echo "<a class='actu_box' href='actualites?actuid=".$row['actu_id']."'>";
+
+            
+        $stmt1 = $db->query("SELECT * FROM actusection WHERE actusection_actuid =".$row['actu_id']);
+        $found_image = false;
+        while ($row1 = $stmt1->fetch()) {
+          if ($row1['actusection_is_image']==1){
+            $found_image = true;
+            echo "<img class='actu_miniature' src='assets/php/actualites_files/".$row1['actusection_filepath']."'>";
+            break;
+          }
+        }
+
+            echo '<div class="actu_text">';
+            echo "<h4>".$row['actu_nom']."</h4>";
+            
+            $stmt1 = $db->query("SELECT * FROM actusection WHERE actusection_actuid =".$row['actu_id']);
+            while ($row1 = $stmt1->fetch()) {
+              if (strlen($row1['actusection_desc'])>0){
+                echo "<p>".$row1['actusection_desc']."</p>";
+                break;
+              }
+            }
+            echo '</div>';
+
+            echo "</a>";
+
+            
+        if (!$found_image){
+         echo "
+         <script>
+         $('.actu_text').width('100%');
+         $('.actu_text').css('margin-bottom','20px');
+         </script>
+         ";
+        }
+        }
+
+        ?>
   </div>
+         <div id="actus_rightarrow"></div>
+  </div>
+  
+  <a class="voirplus" href="actualites">Voir toutes les actualités d'Augustine Métro</a>
+
       <div class="bonheur_categorie_title second">
         <img src = "assets/img/softshell.jpg">
         <p>SOFTSHELLS</p>
@@ -268,8 +319,6 @@ $products = $stmt->fetchAll();
   
   </div>
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
 
   $(document).ready(function(){
@@ -284,7 +333,18 @@ $products = $stmt->fetchAll();
     if (window.innerWidth > 900){
   document.getElementById("derniers_articles_leftarrow").style.opacity = "0";
   document.getElementById("derniers_articles_rightarrow").style.opacity = "0";
-}
+    }
+  });
+  $( "#zone_newscontainer" ).mouseenter(function() {
+  document.getElementById("actus_leftarrow").style.opacity = "1";
+  document.getElementById("actus_rightarrow").style.opacity = "1";
+  });
+  $( "#zone_newscontainer" ).mouseleave(function() {
+    if (window.innerWidth > 900){
+  document.getElementById("actus_leftarrow").style.opacity = "0";
+  document.getElementById("actus_rightarrow").style.opacity = "0";
+  }
+
   });
 
   $('#derniers_articles_rightarrow').click(function(){
@@ -312,6 +372,45 @@ $products = $stmt->fetchAll();
   collection[i].style.width = document.getElementById("ponchotitle").offsetWidth+"px";
   }
   });
+
+  var actu_id_offset = 0;
+
+  document.getElementById("actus_rightarrow").onclick = function(){
+    actu_id_offset += 1;
+    $.post("assets/php/get_actupreview.php",
+  {
+    offset: actu_id_offset
+  },
+  function(data){
+    if (data.length>0){
+      $('.zone_news').html(data);
+    }else{
+      actu_id_offset = 0;
+      $.post("assets/php/get_actupreview.php",
+  {
+    offset: actu_id_offset
+  },
+  function(data){
+     $('.zone_news').html(data);
+  });
+    }
+  });
+  }
+
+  document.getElementById("actus_leftarrow").onclick = function(){
+    actu_id_offset -= 1;
+    if (actu_id_offset < 0){
+      actu_id_offset += 2;
+    }
+    $.post("assets/php/get_actupreview.php",
+  {
+    offset: actu_id_offset
+  },
+  function(data){
+      $('.zone_news').html(data);
+  });
+  }
+
   </script>
 
 </body>

@@ -46,7 +46,7 @@ class actu {
     }
 
     function get_image_path(){
-        return $this->filepath;
+        return "assets/php/actualites_files/".$this->filepath;
     }
 
     function get_video_path(){

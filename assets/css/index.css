@@ -140,6 +140,7 @@ body{
       margin-right: 5vw;
       opacity: 0;
       transition: opacity 0.2s;
+      cursor: pointer;
   }
 
   #derniers_articles_rightarrow{
@@ -151,6 +152,7 @@ body{
     margin-left: 5vw;
     opacity: 0;
     transition: opacity 0.2s;
+    cursor: pointer;
 }
 
 .caption a{
@@ -175,13 +177,43 @@ body{
     background-color: rgb(60, 168, 132);
 }
 
+.actu_box{
+    width: 100%;
+    color: black;
+    display: flex;
+}
+.actu_miniature{
+    width: 50%;
+}
+.actu_text{
+    width: 45%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin-left: 2.5%;
+}
+
 .zone_news{
-    border: solid black 4px;
     text-align: center;
     margin-top: 8vh;
-    width: 100%;
-    height: 500px;
-    line-height: 500px;
+    width: 80%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    background-color: white;
+    min-height: 250px;
+}
+
+
+#zone_newscontainer{
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .zone_bonheur{
@@ -200,7 +232,7 @@ body{
 }
 .voirplus:hover{
     background-color: rgb(60, 168, 132);
-    border: solid rgba(0, 0, 0, 0) 0px;
+    border: solid rgba(0, 0, 0, 0) 1px;
     color: white;
 }
 
@@ -359,4 +391,60 @@ position: relative;
         color: white;
         text-align: center;
     }
+    
+
+.actu_box{
+    flex-direction: column;
+    width: 95vw;
+}
+.actu_miniature{
+    width: 100%;
+}
+.actu_text{
+    width: 100%;
+    padding-bottom: 30px;
+    margin-left: 0;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.zone_news{
+    width: 100%;
+}
+#zone_newscontainer{
+    width: 95vw;
+}
+#actus_leftarrow{
+display: none;
+}
+#actus_rightarrow{
+display: none;
+}
+}
+
+
+#actus_leftarrow{
+    width: 60px;
+    height: 100px;
+    margin-right: 50px;
+    background-image: url(../img/arrow-left.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    cursor: pointer;
+}
+#actus_rightarrow{
+    width: 60px;
+    height: 100px;
+    margin-left: 50px;
+    background-image: url(../img/arrow-right.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    cursor: pointer;
 }

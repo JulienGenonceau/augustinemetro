@@ -24,39 +24,36 @@
     <div class="box" id="actualite">
         <?php
 
-    $actualite = new actu("Les poules ont maintenant des dents", [
-        new actu_section(false, true, "assets/img/actualites/734775-chocolats-de-paques-cluizel-2022-paques-tropicales.jpg", "C'est véridique", "A constructor allows you to initialize an object's properties upon creation of the object.
 
-        If you create a __construct() function, PHP will automatically call this function when you create an object from a class.
-        
-        Notice that the construct function starts with two underscores (__)!
-        
-        We see in the example below, that using a constructor saves us from calling the set_name() method which reduces the amount of code:"),
-        new actu_section(false, false, "","C'est véridique", "A constructor allows you to initialize an object's properties upon creation of the object.
+$stmt = $db->query("SELECT * FROM actu ORDER BY actu_id DESC LIMIT 1");
+if (isset($_GET['actuid'])){
+    $stmt = $db->query("SELECT * FROM actu WHERE actu_id =".$_GET['actuid']);
+}
+$lastactu = $stmt->fetch();
+    
+$name = $lastactu['actu_nom'];
+$date_de_sortie = $lastactu['actu_date'];
+$show_date = true;
+if($lastactu['actu_showdate']==0){$show_date = false;}
+$lastactu_ID = $lastactu['actu_id'];
 
-        If you create a __construct() function, PHP will automatically call this function when you create an object from a class.
-        
-        Notice that the construct function starts with two underscores (__)!
-        
-        We see in the example below, that using a constructor saves us from calling the set_name() method which reduces the amount of code:"),
-        new actu_section(false, true, "assets/img/actualites/734775-chocolats-de-paques-cluizel-2022-paques-tropicales.jpg", "C'est véridique", "A constructor allows you to initialize an object's properties upon creation of the object.
+$stmt = $db->query("SELECT * FROM actusection WHERE actusection_actuid =".$lastactu_ID);
 
-        If you create a __construct() function, PHP will automatically call this function when you create an object from a class.
-        
-        Notice that the construct function starts with two underscores (__)!
-        
-        We see in the example below, that using a constructor saves us from calling the set_name() method which reduces the amount of code:"),
-        new actu_section(false, true, "assets/img/actualites/734775-chocolats-de-paques-cluizel-2022-paques-tropicales.jpg", "", ""),
-        new actu_section(false, false, "", "", "A constructor allows you to initialize an object's properties upon creation of the object.
+$liste_de_sections = [];
+while ($row = $stmt->fetch()) {
+    $row_isvideo = false;
+    $row_isimage = false;
+    if ($row['actusection_is_video']=='1'){$row_isvideo = true;}
+    if ($row['actusection_is_image']=='1'){$row_isimage = true;}
 
-        If you create a __construct() function, PHP will automatically call this function when you create an object from a class.
-        
-        Notice that the construct function starts with two underscores (__)!
-        
-        We see in the example below, that using a constructor saves us from calling the set_name() method which reduces the amount of code:")
-    ], 
-    date("Y/m/d"),
-    true);
+    $row_filepath = $row['actusection_filepath'];
+    $row_title = $row['actusection_title'];
+    $row_desc = $row['actusection_desc'];
+
+    $liste_de_sections[] = new actu_section($row_isvideo, $row_isimage, $row_filepath,  $row_title, $row_desc);
+}
+
+$actualite = new actu($name, $liste_de_sections, $date_de_sortie, $show_date);
 
     echo "<p class='actu_title'>".$actualite->get_name()."</p>";
 
@@ -131,7 +128,14 @@
     </div>
 
     <div class = "box" id="touteslesactualites">
-        Liste de toutes les actualités
+        <?php
+
+        $stmt = $db->query("SELECT * FROM actu ORDER BY actu_id DESC LIMIT 100");
+        while ($row = $stmt->fetch()) {
+            echo "<a href='actualites?actuid=".$row['actu_id']."'>".$row['actu_nom']."<br>";
+        }
+
+        ?>
     </div>
     </div>
     

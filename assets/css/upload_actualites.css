@@ -230,3 +230,12 @@ body {
 #newsection_contenu{
     display : none;
 }
+
+.preview{
+    top: 0;
+    border: solid 1px black;
+    display: flex;
+    flex-direction : column;
+    justify-content : center;
+    align-items : center;
+}

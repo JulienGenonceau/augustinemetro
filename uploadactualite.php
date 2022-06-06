@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/actualites.css">
     <link rel="stylesheet" href="assets/css/upload_actualites.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <title>Actualités</title>
@@ -31,7 +32,7 @@
         $actualite = new actu($name, $liste_de_sections, $date_de_sortie, $show_date);
 
         echo "<p>Nom de l'article</p>";
-        echo '<input id="actu_name_input" type="text" value="'.$name.'"></input>'
+        echo '<input id="actu_name_input" type="text" value="'.$name.'" maxlength="50"></input>'
     ?>
 
 <label class="container">
@@ -52,7 +53,7 @@
         <p>Image OU Vidéo</p>
         <input type="file" name=""></input>
         <p>Titre</p>
-        <input type="text" name="" value="'.$title.'"></input>
+        <input type="text" name="" value="'.$title.'" maxlength="100"></input>
         <p>Texte</p>
         <div class="cont">
         <div id="editor" contenteditable="false">
@@ -89,6 +90,7 @@
     </div>
 
     <div class="preview">
+
     </div>
     
 
@@ -99,7 +101,7 @@
         <p>Image OU Vidéo</p>
         <input type="file" name=""></input>
         <p>Titre</p>
-        <input type="text" name="" value=""></input>
+        <input type="text" name="" value="" maxlength="100"></input>
         <p>Texte</p>
         <div class="cont">
         <div id="editor" contenteditable="false">
@@ -128,10 +130,9 @@
     </div>
     
     </div>
-    
+
     </div>
-    
-  
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
@@ -263,7 +264,41 @@ function valider_et_publier(){
 }
     list_title.push(allsections[i].children[4].value)
     list_text.push(allsections[i].children[6].children[0].children[1].innerHTML)
+    
+
     }
+
+    var allsections = document.getElementsByClassName('section_actu');
+    let formData = new FormData();
+    const number_of_files = allsections.length-1
+    formData.append("number_of_files", number_of_files);
+    for (var i = 0; i < number_of_files; i++){
+        let photo = allsections[i].children[2].files[0];
+
+        if (photo != null){
+        console.log(photo.name)
+        if (isImage(photo.name) || isVideo(photo.name)){
+         formData.append("file"+String(i), photo);
+        }}
+    }
+
+  $.ajax({
+    // Your server script to process the upload
+    url: 'assets/php/uploadactualitetraitement_fileupload.php',
+    type: 'POST',
+
+    // Form data
+    data: formData,
+
+    // Tell jQuery not to process data or worry about content-type
+    // You *must* include these options!
+    cache: false,
+    contentType: false,
+    processData: false,
+         success: function(data) {
+             $('body').html(data);
+        }
+  });
 
     $.post('assets/php/uploadactualitetraitement.php', {
     name : name,
@@ -276,7 +311,7 @@ function valider_et_publier(){
     list_text : list_text
     }, 
     function(returnedData){
-         $('body').html(returnedData);
+         $('body').append(returnedData);
 });
 
 }
@@ -311,6 +346,153 @@ function isVideo(filename) {
   }
   return false;
 }
+
+refresh_preview();
+function refresh_preview() {
+
+  $('.preview').html('');
+    const name = document.getElementById('actu_name_input').value;
+  $('.preview').append("<p class='actu_title'>"+name+"</p>");
+
+  var allsections = document.getElementsByClassName('section_actu');
+
+  var image_first = true;
+
+          for (var i = 0; i < allsections.length-1; i++){
+
+            //check si la section est vide ou non
+            if (section_contains_image(i) || section_contains_video(i) || allsections[i].children[4].value.length>0 || allsections[i].children[6].children[0].children[1].innerText.length>0){
+
+
+            div_actu_section = document.createElement("div");
+            div_actu_section.className = 'actu_section_container';
+
+        if (image_first){
+            show_image_or_video(i, div_actu_section);
+            show_title_and_text(i, div_actu_section);
+        }else{
+            show_title_and_text(i, div_actu_section);
+            show_image_or_video(i, div_actu_section);
+        }
+    
+        if (section_contains_image(i) || section_contains_video(i)){
+        image_first = !image_first;}
+        
+          $('.preview').append(div_actu_section)
+
+          }
+
+        }
+
+
+}
+
+function show_image_or_video(i, div_actu_section) {
+  if (section_contains_image(i)){
+    div_section_item = document.createElement("div");
+    div_section_item.className = 'actu_section_item';
+
+    div_img = document.createElement("img");
+    div_img.id = "image"+String(i);
+    var allsections = document.getElementsByClassName('section_actu');
+    readURL( allsections[i].children[2], i)
+    div_img.className = "actu_img";
+
+    div_section_item.appendChild(div_img);
+
+    div_actu_section.appendChild(div_section_item);
+  }
+}
+
+function show_title_and_text(i, div_actu_section){
+  
+  var allsections = document.getElementsByClassName('section_actu');
+
+  if (allsections[i].children[4].value.length>0 || allsections[i].children[6].children[0].children[1].innerText.length>0){
+
+    div_section_item = document.createElement("div");
+    div_section_item.className = 'actu_section_item';
+
+            if (allsections[i].children[4].value.length>0){
+              div_title = document.createElement("p");
+              div_title.className = 'actu_section_title';
+              div_title.innerHTML = allsections[i].children[4].value;
+              div_section_item.append(div_title);
+            }
+
+            if (allsections[i].children[6].children[0].children[1].innerText.length>0){
+              div_title = document.createElement("p");
+              div_title.className = 'actu_section_text';
+              div_title.innerHTML = allsections[i].children[6].children[0].children[1].innerHTML;
+              div_section_item.append(div_title);
+            }
+    
+                
+        }
+
+        
+    div_actu_section.appendChild(div_section_item);
+  
+}
+
+function section_contains_image(i){
+  var allsections = document.getElementsByClassName('section_actu');
+  if (allsections[i].children[2].files.length > 0){
+    var fullPath = allsections[i].children[2].value;
+    if (fullPath) {
+    var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+    var filename = fullPath.substring(startIndex);
+    if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+        filename = filename.substring(1);
+    }
+    if (isImage(filename)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  }else{
+    return false;
+  }
+}
+
+function section_contains_video(i){
+  var allsections = document.getElementsByClassName('section_actu');
+  if (allsections[i].children[2].files.length > 0){
+    var fullPath = allsections[i].children[2].value;
+    if (fullPath) {
+    var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+    var filename = fullPath.substring(startIndex);
+    if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+        filename = filename.substring(1);
+    }
+    if (isVideo(filename)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  }else{
+    return false;
+  }
+}
+
+$('body').on('click', function(){
+  refresh_preview();
+})
+
+function readURL(input, i) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#image'+String(i))
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
   </script>
 </body>
