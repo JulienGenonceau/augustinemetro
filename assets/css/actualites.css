@@ -150,3 +150,7 @@ h4{
         flex-direction: column;
     }
 }
+
+.video{
+    background-color: rgb(0, 0, 0);
+}

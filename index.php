@@ -196,6 +196,17 @@ $products = $stmt->fetchAll();
         ?>
 			</ul>
 
+      <?php
+
+$sql = "SELECT count(*) FROM actu"; 
+$result = $db->prepare($sql); 
+$result->execute(); 
+$number_of_rows = $result->fetchColumn(); 
+
+if ($number_of_rows > 0){
+
+  ?>
+
       <div id="zone_newscontainer">
          <div id="actus_leftarrow"></div>
       <div class = "zone_news">
@@ -203,7 +214,7 @@ $products = $stmt->fetchAll();
 
         $stmt = $db->query("SELECT * FROM actu ORDER BY actu_id DESC LIMIT 1");
         while ($row = $stmt->fetch()) {
-            echo "<a class='actu_box' href='actualites?actuid=".$row['actu_id']."'>";
+            echo "<a class='actu_box' href='actualites.php?actuid=".$row['actu_id']."'>";
 
             
         $stmt1 = $db->query("SELECT * FROM actusection WHERE actusection_actuid =".$row['actu_id']);
@@ -245,8 +256,13 @@ $products = $stmt->fetchAll();
   </div>
          <div id="actus_rightarrow"></div>
   </div>
+
   
-  <a class="voirplus" href="actualites">Voir toutes les actualités d'Augustine Métro</a>
+  
+  <a class="voirplus" href="actualites.php">Voir toutes les actualités d'Augustine Métro</a>
+  <?php
+}
+  ?>
 
       <div class="bonheur_categorie_title second">
         <img src = "assets/img/softshell.jpg">

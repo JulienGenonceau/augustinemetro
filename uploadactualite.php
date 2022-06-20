@@ -19,7 +19,7 @@
       if (isset($_GET['actumodif'])){
         $getttt = "?actumodif=".$_GET['actumodif'];
       };
-      echo('<form action="uploadactualite'.$getttt.'" method="post">');
+      echo('<form action="uploadactualite.php'.$getttt.'" method="post">');
       ?>
     <label for="uname"><b>Username</b></label>
     <input type="text" placeholder="Enter Username" name="uname" required>
@@ -180,10 +180,6 @@
     
             <div id="page" contenteditable="true"></div>
         </div>
-        <button class="log-out-client" onclick="getContent();">
-            <i class="fa fa-save"></i>
-            <span>Save content</span>
-        </button>
         </div>
         
         <p class="btnn">Supprimer la section</p>
@@ -304,6 +300,7 @@ function valider_et_publier(){
     var list_is_video = [];
     var list_is_image = [];
     var list_filepath = [];
+    var list_newpaths = [];
     var list_title = [];
     var list_text = [];
     
@@ -317,7 +314,13 @@ function valider_et_publier(){
     }
     list_is_video.push(isVideo(filename))
     list_is_image.push(isImage(filename))
-    list_filepath.push(filename);
+    
+    const extensionname = filename.substring(filename.lastIndexOf("."));
+    const newname = randomString(99)+extensionname;
+
+    list_filepath.push(newname);
+    list_newpaths.push(newname);
+
 }else{
     list_is_video.push(false)
     list_is_image.push(false)
@@ -337,10 +340,10 @@ function valider_et_publier(){
         let photo = allsections[i].children[2].files[0];
 
         if (photo != null){
-        console.log(photo.name)
         if (isImage(photo.name) || isVideo(photo.name)){
-         formData.append("file"+String(i), photo);
-        }}
+         formData.append("file"+String(i), photo, list_newpaths[i]);
+        }
+      }
     }
 
   $.ajax({
@@ -408,8 +411,8 @@ function isVideo(filename) {
   return false;
 }
 
-refresh_preview();
-function refresh_preview() {
+refresh_preview(true);
+function refresh_preview(withvideos) {
 
   $('.preview').html('');
     const name = document.getElementById('actu_name_input').value;
@@ -429,11 +432,11 @@ function refresh_preview() {
             div_actu_section.className = 'actu_section_container';
 
         if (image_first){
-            show_image_or_video(i, div_actu_section);
+            show_image_or_video(i, div_actu_section, withvideos);
             show_title_and_text(i, div_actu_section);
         }else{
             show_title_and_text(i, div_actu_section);
-            show_image_or_video(i, div_actu_section);
+            show_image_or_video(i, div_actu_section, withvideos);
         }
     
         if (section_contains_image(i) || section_contains_video(i)){
@@ -448,7 +451,7 @@ function refresh_preview() {
 
 }
 
-function show_image_or_video(i, div_actu_section) {
+function show_image_or_video(i, div_actu_section, withvideos) {
   if (section_contains_image(i)){
     div_section_item = document.createElement("div");
     div_section_item.className = 'actu_section_item';
@@ -461,6 +464,54 @@ function show_image_or_video(i, div_actu_section) {
 
     div_section_item.appendChild(div_img);
 
+    div_actu_section.appendChild(div_section_item);
+  }
+  if (section_contains_video(i)){
+
+    div_section_item = document.createElement("div");
+    div_section_item.className = 'actu_section_item';
+
+    div_video = document.createElement("video");
+    div_video.id = "video"+String(i);
+    div_video.className = "actu_video";
+
+    if (withvideos){
+    var allsections = document.getElementsByClassName('section_actu');
+    input =  allsections[i].children[2];
+
+     const files = input.files || [];
+
+  if (!files.length) return;
+  
+  const reader = new FileReader();
+  const video = div_video;
+  video.setAttribute("controls","controls") ;
+  const videoSource = document.createElement('source');
+
+  reader.onload = function (e) {
+    videoSource.setAttribute('src', e.target.result);
+    video.appendChild(videoSource);
+    video.load();
+    video.play();
+    video.pause();
+  };
+  
+  reader.onprogress = function (e) {
+    console.log('progress: ', Math.round((e.loaded * 100) / e.total));
+  };
+  
+  reader.readAsDataURL(files[0]);
+}else{
+   const btn_actualise =  document.createElement('div');
+   btn_actualise.innerText = "Cliquez pour actualiser la ou les vidéos";
+   btn_actualise.className = "btn_actualise_videos"
+   div_section_item.appendChild(btn_actualise);
+   btn_actualise.onclick = function() {
+      refresh_preview(true);
+   }
+}
+
+    div_section_item.appendChild(div_video);
     div_actu_section.appendChild(div_section_item);
   }
 }
@@ -538,8 +589,12 @@ function section_contains_video(i){
   }
 }
 
-$('body').on('click', function(){
-  refresh_preview();
+$('input').on('change', function(){
+  refresh_preview(false);
+})
+
+$('body').on('keyup', function(){
+  refresh_preview(false);
 })
 
 function readURL(input, i) {
@@ -598,7 +653,7 @@ function readURL(input, i) {
       div_actu.appendChild(div_supprimer);
 
       div_modifier.onclick = function() {
-        window.location.replace("uploadactualite?actumodif="+obj.id);
+        window.location.replace("uploadactualite.php?actumodif="+obj.id);
       }
 
       div_supprimer.onclick = function() {
@@ -607,7 +662,7 @@ function readURL(input, i) {
           id_to_delete: obj.id
         },
         function(){
-        window.location.replace("uploadactualite");
+        window.location.replace("uploadactualite.php");
         });
       }
 
@@ -618,6 +673,18 @@ function readURL(input, i) {
   }
 
   AddNewSection();
+
+  function randomString(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+ charactersLength));
+   }
+   return result;
+}
+
 
   </script>
 

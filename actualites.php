@@ -21,6 +21,17 @@
 
     <div class="bodycontainer">
     <h4 class="firsttitle">LES ACTUALITÉS D'AUGUSTINE MÉTRO</h2>
+
+    <?php
+    $sql = "SELECT count(*) FROM actu"; 
+    $result = $db->prepare($sql); 
+    $result->execute(); 
+    $number_of_rows = $result->fetchColumn(); 
+    
+    if ($number_of_rows > 0){
+
+        ?>
+
     <div class="box" id="actualite">
         <?php
 
@@ -86,44 +97,6 @@ $actualite = new actu($name, $liste_de_sections, $date_de_sortie, $show_date);
         echo "<p class='actu_date'>Article paru le ".$actualite->get_date()."</p>";
     }
 
-
-    function show_image_or_video($section){
-        if ($section->contains_image()){
-            
-            echo "<div class='actu_section_item'>";
-            
-            if (strlen($section->get_title())==0 && strlen($section->get_text())==0){echo"<div class='imgsmaller'>";};
-    
-                echo "<img class='actu_img' src='".$section->get_image_path()."'>";
-
-            if (strlen($section->get_title())==0 && strlen($section->get_text())==0){echo"</div>";};
-                
-            echo "</div>";
-    
-            }
-            if ($section->contains_video()){
-                //afficher video !
-            }
-    }
-
-    function show_title_and_text($section){
-        if (strlen($section->get_title())>0 || strlen($section->get_text())>0){
-
-            echo "<div class='actu_section_item'>";
-
-            if (strlen($section->get_title())>0){
-                echo "<p class='actu_section_title'>".$section->get_title()."</p>";
-            }
-
-            if (strlen($section->get_text())>0){
-                echo "<p class='actu_section_text'>".$section->get_text()."</p>";
-            }
-            
-            echo "</div>";
-                
-        }
-    }
-
         ?>
     </div>
 
@@ -135,7 +108,7 @@ $actualite = new actu($name, $liste_de_sections, $date_de_sortie, $show_date);
         $stmt = $db->query("SELECT * FROM actu ORDER BY actu_id DESC LIMIT 100");
         $found_image = false;
         while ($row = $stmt->fetch()) {
-            echo "<a class='a_actulist' href='actualites?actuid=".$row['actu_id']."'>";
+            echo "<a class='a_actulist' href='actualites.php?actuid=".$row['actu_id']."'>";
             
         $stmt1 = $db->query("SELECT * FROM actusection WHERE actusection_actuid =".$row['actu_id']);
             while ($row1 = $stmt1->fetch()) {
@@ -153,7 +126,51 @@ $actualite = new actu($name, $liste_de_sections, $date_de_sortie, $show_date);
     </div>
     </div>
     
-  <?php include 'assets/includes/footer.php';?>
+  <?php 
+  
+    }else echo "<p> Aucune actualitée pour le moment </p>";
+  
+  include 'assets/includes/footer.php';
+  
+  function show_image_or_video($section){
+    if ($section->contains_image()){
+        
+        echo "<div class='actu_section_item'>";
+        
+        if (strlen($section->get_title())==0 && strlen($section->get_text())==0){echo"<div class='imgsmaller'>";};
+
+            echo "<img class='actu_img' src='".$section->get_image_path()."'>";
+
+        if (strlen($section->get_title())==0 && strlen($section->get_text())==0){echo"</div>";};
+            
+        echo "</div>";
+
+        }
+        if ($section->contains_video()){
+            echo "<div class='actu_section_item'>";
+            echo '<video src="'.$section->get_video_path().'" class = "video" id="video" width="100%" height="100%" controls></video>';
+            echo "</div>";
+        }
+}
+
+function show_title_and_text($section){
+    if (strlen($section->get_title())>0 || strlen($section->get_text())>0){
+
+        echo "<div class='actu_section_item'>";
+
+        if (strlen($section->get_title())>0){
+            echo "<p class='actu_section_title'>".$section->get_title()."</p>";
+        }
+
+        if (strlen($section->get_text())>0){
+            echo "<p class='actu_section_text'>".$section->get_text()."</p>";
+        }
+        
+        echo "</div>";
+            
+    }
+}
+  ?>
     
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
