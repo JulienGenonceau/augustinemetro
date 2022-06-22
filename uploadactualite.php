@@ -47,7 +47,15 @@
     <div class="bodycontainer">
 
     <div class="leftpart">
-    <h3> Publier une actualité </h3>
+
+    <?php
+      if (isset($_GET['actumodif'])){
+        echo "<h3> Modifier l'actualité </h3>";
+      }else{
+        echo "<h3> Publier une actualité </h3>";
+      }
+    ?>
+  
 
     <?php
         $name = "Exemple de nom d'article";
@@ -80,7 +88,12 @@
             $row_title = $row['actusection_title'];
             $row_desc = $row['actusection_desc'];
             
-            $liste_de_sections[] = new actu_section($row_isvideo, $row_isimage, $row_filepath,  $row_title, $row_desc);
+            $newsection = new actu_section($row_isvideo, $row_isimage, $row_filepath,  $row_title, $row_desc);
+            if (strlen($row_filepath)>0){
+              $newsection->set_file_is_from_bdd(true);
+            } 
+
+            $liste_de_sections[] = $newsection;
         }
         
       //  $section = new actu_section(false, false, "",  "Titre exemple", "Description exemple"); // a suppr
@@ -103,14 +116,27 @@
     <?php
 
     //for ($i = 0; $i < count($actualite->get_sections()); $i++){
-      for ($i = 0; $i < 1; $i++){
+      $message_choisir = "Ajouter une image ou une vidéo";
+      $i = 0;
         $title = $actualite->get_sections()[$i]->get_title();
         $desc =  $actualite->get_sections()[$i]->get_text();
+        $ancienfile_name = "Choisir une image ou une vidéo";
+        if ($actualite->get_sections()[$i]->get_file_is_from_bdd()==true) {
+          $ancienfile_name = $actualite->get_sections()[$i]->get_file_path();
+          if ($actualite->get_sections()[$i]->contains_video()){
+            $message_choisir = "Changer la vidéo actuelle";
+          }
+          if ($actualite->get_sections()[$i]->contains_image()){
+            $message_choisir = "Changer l'image actuelle";
+          }
+        }
           echo '
           <div class="section_actu">
           <p class="sectionleftpartitle">Section '.($i+1).'</p>
           <p>Image OU Vidéo</p>
-          <input type="file" name=""></input>
+          <input class="hidden" id="files" type="file" title=" " name=""></input>
+          <label class="labelfileupload" for="files">'."$message_choisir".'</label>
+          <div class="croix_supprimer_photo">X</div>
           <p>Titre</p>
           <input type="text" name="" value="'.$title.'" maxlength="100"></input>
           <p>Texte</p>
@@ -138,15 +164,21 @@
       </div>
       
           ';
-    }
 
     ?>
     
-    <p class="btnn" onclick="AddNewSection();">Ajouter une section +</p>
+    <p class="btnn" onclick="AddNewSection('', '', '');">Ajouter une section +</p>
 
     <p class="btnn" onclick="ShowCRUD();">Modifier / Supprimer des articles</p>
 
-    <p class="btnn" onclick="valider_et_publier();">Publier l'article ✔️</p>
+    <?php
+ if (isset($_GET['actumodif'])){
+  echo '<p class="btnn" onclick="valider_et_publier();">Valider modifications ✔️</p>';
+ }else{
+  echo '<p class="btnn" onclick="valider_et_publier();">Publier l\'article ✔️</p>';
+ }
+    ?>
+    
 
     </div>
 
@@ -160,7 +192,9 @@
     <div class="section_actu">
         <p class="sectionleftpartitle">Section </p>
         <p>Image OU Vidéo</p>
-        <input type="file" name=""></input>
+        <input class="hidden" id="files'.$i.'" type="file" title=" " name=""></input>
+        <label class="labelfileupload" for="files'.$i.'">Ajouter une image ou une vidéo</label>
+        <div class="croix_supprimer_photo" onclick="delete_file_from_input(event)">X</div>
         <p>Titre</p>
         <input type="text" name="" value="" maxlength="100"></input>
         <p>Texte</p>
@@ -195,28 +229,43 @@
 
   <script>
 
-      function AddNewSection(){
+      function AddNewSection(name, description, filepath){
           $('#leftpart_sectionscontainer').append(document.getElementById('newsection_contenu').innerHTML);
 
           var allsections = document.getElementsByClassName('section_actu');
           var lastSection = allsections[allsections.length - 2];
           lastSection.children[0].innerText += " "+String(allsections.length-1);
           const index = allsections.length - 2
-          lastSection.children[7].onclick = function(){
-              DeleteSection(index);
+          lastSection.children[9].onclick = function(){
+              DeleteSection(index, true);
           }
+          lastSection.children[2].innerHTML = filepath;
+          lastSection.children[2].id = "fileinnnput"+index; 
+          lastSection.children[3].setAttribute('for', "fileinnnput"+index)
+          lastSection.children[4].onclick = function(event){
+            delete_file_from_input(event, index);
+          }
+          lastSection.children[8].children[0].children[1].innerText = description;
+
       }
 
-      function DeleteSection(id) {
+      function DeleteSection(id, animated) {
           var allsections = document.getElementsByClassName('section_actu');
           var sectionToDelete = allsections[id];
           allsections[id].style.opacity = 0;
+          if (animated) {
           setTimeout(
           function(){
               $(allsections[id]).remove()
               resetAllIds();
+              refresh_preview(false);
           }
           , 500);
+        }else{
+          $(allsections[id]).remove();
+          resetAllIds();
+          refresh_preview(false);
+        }
       }
 
       function resetAllIds() {
@@ -227,8 +276,8 @@
           const index = i
           var lastSection = allsections[i];
           lastSection.children[0].innerText = "Section "+String(i+1);
-          lastSection.children[7].onclick = function(){
-              DeleteSection(index);
+          lastSection.children[9].onclick = function(){
+              DeleteSection(index, true);
           }
 
           }
@@ -326,8 +375,8 @@ function valider_et_publier(){
     list_is_image.push(false)
     list_filepath.push("");
 }
-    list_title.push(allsections[i].children[4].value)
-    list_text.push(allsections[i].children[6].children[0].children[1].innerHTML)
+    list_title.push(allsections[i].children[6].value)
+    list_text.push(allsections[i].children[8].children[0].children[1].innerHTML)
     
 
     }
@@ -425,7 +474,7 @@ function refresh_preview(withvideos) {
           for (var i = 0; i < allsections.length-1; i++){
 
             //check si la section est vide ou non
-            if (section_contains_image(i) || section_contains_video(i) || allsections[i].children[4].value.length>0 || allsections[i].children[6].children[0].children[1].innerText.length>0){
+            if (section_contains_image(i) || section_contains_video(i) || allsections[i].children[6].value.length>0 || allsections[i].children[8].children[0].children[1].innerText.length>0){
 
 
             div_actu_section = document.createElement("div");
@@ -448,23 +497,28 @@ function refresh_preview(withvideos) {
 
         }
 
-
+        check_files_inputs();
 }
 
 function show_image_or_video(i, div_actu_section, withvideos) {
   if (section_contains_image(i)){
+    console.log(i);
     div_section_item = document.createElement("div");
     div_section_item.className = 'actu_section_item';
 
     div_img = document.createElement("img");
     div_img.id = "image"+String(i);
     var allsections = document.getElementsByClassName('section_actu');
-    readURL( allsections[i].children[2], i)
+    readURL(allsections[i].children[2], i)
     div_img.className = "actu_img";
 
     div_section_item.appendChild(div_img);
 
     div_actu_section.appendChild(div_section_item);
+
+    if (allsections[i].children[2].innerText.length>0){
+      div_img.src = "assets/php/actualites_files/"+allsections[i].children[2].innerText;
+    }
   }
   if (section_contains_video(i)){
 
@@ -481,7 +535,7 @@ function show_image_or_video(i, div_actu_section, withvideos) {
 
      const files = input.files || [];
 
-  if (!files.length) return;
+  if(files.length){
   
   const reader = new FileReader();
   const video = div_video;
@@ -502,11 +556,18 @@ function show_image_or_video(i, div_actu_section, withvideos) {
   
   reader.readAsDataURL(files[0]);
 }else{
+  if (allsections[i].children[2].innerText.length>0){
+    const video = div_video;
+  video.setAttribute("controls","controls") ;
+  video.src = "assets/php/actualites_files/"+allsections[i].children[2].innerText;
+    }
+}
+}else{
    const btn_actualise =  document.createElement('div');
    btn_actualise.innerText = "Cliquez pour actualiser la ou les vidéos";
    btn_actualise.className = "btn_actualise_videos"
    div_section_item.appendChild(btn_actualise);
-   btn_actualise.onclick = function() {
+   btn_actualise.onmouseup = function() {
       refresh_preview(true);
    }
 }
@@ -520,22 +581,22 @@ function show_title_and_text(i, div_actu_section){
   
   var allsections = document.getElementsByClassName('section_actu');
 
-  if (allsections[i].children[4].value.length>0 || allsections[i].children[6].children[0].children[1].innerText.length>0){
+  if (allsections[i].children[6].value.length>0 || allsections[i].children[8].children[0].children[1].innerText.length>0){
 
     div_section_item = document.createElement("div");
     div_section_item.className = 'actu_section_item';
 
-            if (allsections[i].children[4].value.length>0){
+            if (allsections[i].children[6].value.length>0){
               div_title = document.createElement("p");
               div_title.className = 'actu_section_title';
-              div_title.innerHTML = allsections[i].children[4].value;
+              div_title.innerHTML = allsections[i].children[6].value;
               div_section_item.append(div_title);
             }
 
-            if (allsections[i].children[6].children[0].children[1].innerText.length>0){
+            if (allsections[i].children[8].children[0].children[1].innerText.length>0){
               div_title = document.createElement("p");
               div_title.className = 'actu_section_text';
-              div_title.innerHTML = allsections[i].children[6].children[0].children[1].innerHTML;
+              div_title.innerHTML = allsections[i].children[8].children[0].children[1].innerHTML;
               div_section_item.append(div_title);
             }
     
@@ -564,9 +625,21 @@ function section_contains_image(i){
     }
   }
   }else{
-    return false;
+      if (allsections[i].children[2].innerText.length > 0){
+        filename_innertext = allsections[i].children[2].innerText;
+        if (isImage(filename_innertext)){
+          return true;
+        }else{
+          return false;
+        }
+
+
+      }else{
+        return false;
+      }
+    }
+
   }
-}
 
 function section_contains_video(i){
   var allsections = document.getElementsByClassName('section_actu');
@@ -585,7 +658,18 @@ function section_contains_video(i){
     }
   }
   }else{
-    return false;
+    if (allsections[i].children[2].innerText.length > 0){
+        filename_innertext = allsections[i].children[2].innerText;
+        if (isVideo(filename_innertext)){
+          return true;
+        }else{
+          return false;
+        }
+
+
+      }else{
+        return false;
+      }
   }
 }
 
@@ -593,7 +677,19 @@ $('input').on('change', function(){
   refresh_preview(false);
 })
 
+$('label').on('change', function(){
+  refresh_preview(false);
+})
+
+$('label').on('click', function(){
+  refresh_preview(false);
+})
+
 $('body').on('keyup', function(){
+  refresh_preview(false);
+})
+
+$('body').on('click', function(){
   refresh_preview(false);
 })
 
@@ -672,7 +768,7 @@ function readURL(input, i) {
     });
   }
 
-  AddNewSection();
+  AddNewSection('', '', '');
 
   function randomString(length) {
     var result           = '';
@@ -685,6 +781,69 @@ function readURL(input, i) {
    return result;
 }
 
+if (findGetParameter("actumodif").length > 0){
+  DeleteSection(0, false);
+  DeleteSection(0, false);
+
+  <?php
+  $i = count($actualite->get_sections());
+  while ($i > 0){
+    echo'AddNewSection("'.$actualite->get_sections()[$i-1]->get_title().'", "'.$actualite->get_sections()[$i-1]->get_text().'", "'.$actualite->get_sections()[$i-1]->get_file_name().'");
+    var allsections = document.getElementsByClassName("section_actu");';
+    echo 'allsections[(allsections.length-2)].children[6].setAttribute("value","'.$actualite->get_sections()[$i-1]->get_title().'");';
+    echo 'allsections[(allsections.length-2)].children[8].setAttribute("value","'.$actualite->get_sections()[$i-1]->get_text().'");';
+    $i = $i -= 1;
+  }
+  ?>
+
+  refresh_preview(true);
+}
+
+function findGetParameter(parameterName) {
+    var result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+          tmp = item.split("=");
+          if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
+}
+
+$('input').on('change', function(){
+refresh_preview(false);
+})
+
+function check_files_inputs(){
+  var allsections = document.getElementsByClassName('section_actu');
+  for (var i = 0; i < allsections.length-1; i++){
+              
+  if (allsections[i].children[2].files.length > 0 || allsections[i].children[2].innerText.length > 0){
+    allsections[i].children[3].innerText = "Changer le fichier";
+    allsections[i].children[4].style.display = "block";
+  }else{
+    allsections[i].children[4].style.display = "none";
+    allsections[i].children[3].innerText = "Ajouter une image ou une vidéo";
+  }
+}
+}
+
+function delete_file_from_input(event, index){
+  console.log(event.target);
+  console.log("avec l'id: "+String(index));
+
+  var input_file = event.target.parentNode.children[2];
+  console.log(input_file);
+  
+  input_file.innerText = "";
+  input_file.type = "text";
+  input_file.value = '';
+  input_file.value = null;
+  input_file.type = "file";
+  refresh_preview(false);
+}
 
   </script>
 

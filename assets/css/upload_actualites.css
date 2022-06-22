@@ -341,3 +341,36 @@ body {
     z-index: 999;
     cursor: pointer;
 }
+
+.p_ancienfichier_name{
+}
+
+.hidden{
+    display: none;
+}
+
+.labelfileupload{
+    background-color: rgb(0, 140, 169);
+    margin: 10px;
+    color: rgb(255, 255, 255);
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.croix_supprimer_photo{
+    position: relative;
+    width: 30px;
+    height: 30px;
+    font-weight: bold;
+    color: white;
+    background-color:red;
+    text-align: center;
+    line-height:30px;
+    margin-bottom: -30px;
+    border-radius: 5px;
+    transform: translate(100px, -42px);
+    cursor: pointer;
+    display: none;
+}

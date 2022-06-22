@@ -33,6 +33,7 @@ class actu {
 
     public $is_video;
     public $is_image;
+    public $file_is_from_bdd;
     public $filepath;
     public $title;
     public $text;
@@ -43,6 +44,15 @@ class actu {
       $this->filepath = $filepath;
       $this->title = $title;
       $this->text = $text;
+      $this->file_is_from_bdd = false;
+    }
+
+    function get_file_is_from_bdd() {
+      return $this->file_is_from_bdd;
+    }
+
+    function set_file_is_from_bdd($bool) {
+      $this->file_is_from_bdd = $bool;
     }
 
     function get_image_path(){
@@ -52,6 +62,14 @@ class actu {
     function get_video_path(){
         return "assets/php/actualites_files/".$this->filepath;
     }
+
+    function get_file_path(){
+      return "assets/php/actualites_files/".$this->filepath;
+  }
+
+  function get_file_name(){
+    return $this->filepath;
+}
     
     function contains_video() {
         if ($this->is_video) {
