@@ -93,7 +93,7 @@ class actu {
       }
       
     function get_text() {
-        return $this->text;
+        return addslashes($this->text);
       }
 
   }

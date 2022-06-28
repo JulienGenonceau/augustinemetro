@@ -40,7 +40,8 @@ if (!empty(mysqli_real_escape_string($link, $_POST["inputvalue"]))) {
     
     LIMIT 0, '.$recherche_max_articles;
 
-    $stmt = $db->query($sql);
+    $stmt = $db->prepare($sql);
+    $stmt->execute(); 
     $products = $stmt->fetchAll();
 
     if (count($products)>0){

@@ -105,7 +105,17 @@
         echo "<p>Nom de l'article</p>";
         echo '<input id="actu_name_input" type="text" value="'.$name.'" maxlength="50"></input>'
     ?>
-
+<section class="toolbar">
+                  <div id="bold" class="icon fa fa-bold">B</div>
+                  <div id="italic" class="icon fa fa-italic">I</div>
+                  <div id="createLink" class="icon fa fa-link">lien</div>
+                  <div id="insertUnorderedList" class="icon fa fa-list">liste1</div>
+                  <div id="insertOrderedList" class="icon fa fa-list-ol">liste2</div>
+                  <div id="justifyLeft" class="icon fa fa-align-left">left</div>
+                  <div id="justifyRight" class="icon fa fa-align-right">right</div>
+                  <div id="justifyCenter" class="icon fa fa-align-center">center</div>
+                  <div id="justifyFull" class="icon fa fa-align-justify">full</div>
+              </section>
 <label class="container">
   <input id="input_show_date" type="checkbox" checked="checked">
   <span class="checkmark">Afficher la date de publication</span>
@@ -142,17 +152,8 @@
           <p>Texte</p>
           <div class="cont">
           <div id="editor" contenteditable="false">
-              <section id="toolbar">
-                  <div id="bold" class="icon fa fa-bold">B</div>
-                  <div id="italic" class="icon fa fa-italic">I</div>
-                  <div id="createLink" class="icon fa fa-link">lien</div>
-                  <div id="insertUnorderedList" class="icon fa fa-list">liste1</div>
-                  <div id="insertOrderedList" class="icon fa fa-list-ol">liste2</div>
-                  <div id="justifyLeft" class="icon fa fa-align-left">left</div>
-                  <div id="justifyRight" class="icon fa fa-align-right">right</div>
-                  <div id="justifyCenter" class="icon fa fa-align-center">center</div>
-                  <div id="justifyFull" class="icon fa fa-align-justify">full</div>
-              </section>
+          <section>
+          </section>
       
               <div id="page" contenteditable="true">'.$desc.'</div>
           </div>
@@ -173,9 +174,9 @@
 
     <?php
  if (isset($_GET['actumodif'])){
-  echo '<p class="btnn" onclick="valider_et_publier();">Valider modifications ✔️</p>';
+  echo '<p class="btnn" onclick="valider_et_publier(true);">Valider modifications ✔️</p>';
  }else{
-  echo '<p class="btnn" onclick="valider_et_publier();">Publier l\'article ✔️</p>';
+  echo '<p class="btnn" onclick="valider_et_publier(false);">Publier l\'article ✔️</p>';
  }
     ?>
     
@@ -200,16 +201,7 @@
         <p>Texte</p>
         <div class="cont">
         <div id="editor" contenteditable="false">
-            <section id="toolbar">
-                <div id="bold" class="icon fa fa-bold">B</div>
-                <div id="italic" class="icon fa fa-italic">I</div>
-                <div id="createLink" class="icon fa fa-link">lien</div>
-                <div id="insertUnorderedList" class="icon fa fa-list">liste1</div>
-                <div id="insertOrderedList" class="icon fa fa-list-ol">liste2</div>
-                <div id="justifyLeft" class="icon fa fa-align-left">left</div>
-                <div id="justifyRight" class="icon fa fa-align-right">right</div>
-                <div id="justifyCenter" class="icon fa fa-align-center">center</div>
-                <div id="justifyFull" class="icon fa fa-align-justify">full</div>
+            <section>
             </section>
     
             <div id="page" contenteditable="true"></div>
@@ -228,6 +220,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
   <script>
+var upload1finished = false;
+var upload2finished = false;
 
       function AddNewSection(name, description, filepath){
           $('#leftpart_sectionscontainer').append(document.getElementById('newsection_contenu').innerHTML);
@@ -245,8 +239,7 @@
           lastSection.children[4].onclick = function(event){
             delete_file_from_input(event, index);
           }
-          lastSection.children[8].children[0].children[1].innerText = description;
-
+          lastSection.children[8].children[0].children[1].innerHTML = description;
       }
 
       function DeleteSection(id, animated) {
@@ -290,21 +283,21 @@ var ghostEditor = {
   },
 
   bindDesignModeToggle: function() {
-    $('#page-content').on('click', function(e) {
+    $('.page-content').on('click', function(e) {
       document.designMode = 'on';
     });
 
-    $('#page-content').on('click', function(e) {
+    $('.page-content').on('click', function(e) {
       var $target = $(e.target);
 
-      if ($target.is('#page-content')) {
+      if ($target.is('.page-content')) {
         document.designMode = 'off';
       }
     });
   },
 
   bindToolbarButtons: function() {
-    $('#toolbar').on('mousedown', '.icon', function(e) {
+    $('.toolbar').on('mousedown', '.icon', function(e) {
       e.preventDefault();
       var btnId = $(e.target).attr('id');
       this.editStyle(btnId);
@@ -338,7 +331,9 @@ function getContent() {
 	alert(content);
 }
 
-function valider_et_publier(){
+function valider_et_publier(modifications){
+
+  console.log('validation et publication...')
 
     const name = document.getElementById('actu_name_input').value;
     const date_de_sortie = new Date();
@@ -371,9 +366,23 @@ function valider_et_publier(){
     list_newpaths.push(newname);
 
 }else{
+    if (allsections[i].children[2].innerText.length > 0){
+      var lefilename = allsections[i].children[2].innerText;
+      list_is_video.push(isVideo(lefilename))
+      list_is_image.push(isImage(lefilename))
+      if (isImage(lefilename) || isVideo(lefilename)){
+        list_filepath.push(lefilename);
+      }else{
+        list_filepath.push("");
+        list_newpaths.push("");
+      }
+    }else{
     list_is_video.push(false)
     list_is_image.push(false)
     list_filepath.push("");
+    list_newpaths.push("");
+    }
+
 }
     list_title.push(allsections[i].children[6].value)
     list_text.push(allsections[i].children[8].children[0].children[1].innerHTML)
@@ -395,6 +404,8 @@ function valider_et_publier(){
       }
     }
 
+    console.log('Ajax file upload...')
+
   $.ajax({
     // Your server script to process the upload
     url: 'assets/php/uploadactualitetraitement_fileupload.php',
@@ -409,11 +420,21 @@ function valider_et_publier(){
     contentType: false,
     processData: false,
          success: function(data) {
-             $('body').html(data);
+             $('body').html("Publication en cours... Redirection...");
+             upload1finished = true;
+             check_if_upload_is_finished();
         }
   });
 
+  var id_modif = -1;
+  if (findGetParameter("actumodif")!=null){
+    id_modif = findGetParameter("actumodif");
+  }
+
+  console.log('Ajax traitement bdd...')
+
     $.post('assets/php/uploadactualitetraitement.php', {
+    id_modif: id_modif,
     name : name,
     date_de_sortie : date_de_sortie,
     show_date : show_date,
@@ -424,9 +445,25 @@ function valider_et_publier(){
     list_text : list_text
     }, 
     function(returnedData){
-         $('body').append(returnedData);
+         $('body').html("Publication en cours... Redirection...");
+         upload2finished = true;
+         check_if_upload_is_finished();
 });
 
+}
+
+function check_if_upload_is_finished(){
+if (upload1finished && upload2finished){
+   if (findGetParameter("actumodif") != null){
+          if (findGetParameter("actumodif").length>0){
+            window.location.href = "actualites.php?actuid="+findGetParameter("actumodif");
+          }else{
+            window.location.href = "actualites.php";
+          }
+         }else{
+          window.location.href = "actualites.php";
+         }
+}
 }
 
 function getExtension(filename) {
@@ -781,7 +818,7 @@ function readURL(input, i) {
    return result;
 }
 
-if (findGetParameter("actumodif").length > 0){
+if (findGetParameter("actumodif")!=null){
   DeleteSection(0, false);
   DeleteSection(0, false);
 
@@ -791,7 +828,7 @@ if (findGetParameter("actumodif").length > 0){
     echo'AddNewSection("'.$actualite->get_sections()[$i-1]->get_title().'", "'.$actualite->get_sections()[$i-1]->get_text().'", "'.$actualite->get_sections()[$i-1]->get_file_name().'");
     var allsections = document.getElementsByClassName("section_actu");';
     echo 'allsections[(allsections.length-2)].children[6].setAttribute("value","'.$actualite->get_sections()[$i-1]->get_title().'");';
-    echo 'allsections[(allsections.length-2)].children[8].setAttribute("value","'.$actualite->get_sections()[$i-1]->get_text().'");';
+    echo 'allsections[(allsections.length-2)].children[8].setAttribute("innerHTML","'.$actualite->get_sections()[$i-1]->get_text().'");';
     $i = $i -= 1;
   }
   ?>

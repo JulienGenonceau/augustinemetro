@@ -176,7 +176,8 @@ ORDER BY  `position` asc,  `id_product` asc
 
 LIMIT 0, '.$nombre_de_derniers_articles_a_afficher_categorie;
 
-$stmt = $db->query($sql);
+$stmt = $db->prepare($sql);
+$stmt->execute();
 $products = $stmt->fetchAll();
         
         for ($i = 0; $i <= $nombre_de_derniers_articles_a_afficher_categorie-1; $i++) {

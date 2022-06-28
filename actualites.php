@@ -20,7 +20,7 @@
     ?>
 
     <div class="bodycontainer">
-    <h4 class="firsttitle">LES ACTUALITÉS D'AUGUSTINE MÉTRO</h2>
+    <h4 class="firsttitle">LES ACTUALITÉS D'AUGUSTINE MÉTRO</h4>
 
     <?php
     $sql = "SELECT count(*) FROM actu"; 

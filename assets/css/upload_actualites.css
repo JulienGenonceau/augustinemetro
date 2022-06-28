@@ -155,7 +155,7 @@ button.log-out-client:hover, button.log-out-client.cancel:hover {
 	background: #fafafa;
 }
 
-#toolbar {
+.toolbar {
 	margin-left: -20px;
 	margin-right: -20px;
 	border-bottom: 1px solid #464646;
@@ -163,6 +163,10 @@ button.log-out-client:hover, button.log-out-client.cancel:hover {
 	overflow: hidden;
 	position: relative;
 	z-index: 2;
+}
+
+.cont{
+    overflow: hidden;
 }
 
 #page {
@@ -340,9 +344,6 @@ body {
     padding: 10px;
     z-index: 999;
     cursor: pointer;
-}
-
-.p_ancienfichier_name{
 }
 
 .hidden{

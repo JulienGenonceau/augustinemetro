@@ -1,7 +1,9 @@
 <?php
 
+
 $number_of_files = $_POST['number_of_files'];
 echo "Number of files : ".$number_of_files;
+
 
 $files = [];
 
